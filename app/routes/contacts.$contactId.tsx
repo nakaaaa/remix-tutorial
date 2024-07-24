@@ -1,17 +1,21 @@
-import { Form } from "@remix-run/react";
+import { json, LoaderFunctionArgs} from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
+import invariant from "tiny-invariant";
 import type { FunctionComponent } from "react";
 
-import type { ContactRecord } from "../data";
+import { getContact, ContactRecord } from "../data";
+
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  invariant(params.contactId, "Missing contactId param");
+  const contact = await getContact(params.contactId);
+  if (!contact) {
+    throw new Response("Not Found", { status: 404 });
+  }
+  return json({ contact });
+};
 
 export default function Contact() {
-  const contact = {
-    first: "Your",
-    last: "Name",
-    avatar: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEil4F0c37zeO32I97NAb9K97bmwY0JzXpv2R2kgcbyrWDHKpV07LE1NFuRaQ_e0wRdUIZzG3kdVubrlWeCh4R8J_DwhtgTr_ulwsdyT2-0lmqyXR8sPx4G5uYrndslL_Hxmr0RX96mlgkqDVV4Y_8miWzXaz5gd2ePAwwgP7uKzcggdAw0I64lVQ6oOXQ/s949/eto_usagi_banzai.png",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: true,
-  };
+  const { contact } = useLoaderData<typeof loader>();
   
   return (
     <div id="contact">
@@ -25,7 +29,7 @@ export default function Contact() {
       
       <div>
         <h1>
-          {contact.first || contact.last ? (
+          {contact.first || contact?.last ? (
             <>
               {contact.first} {contact.last}
             </>

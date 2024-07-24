@@ -11,7 +11,7 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 
-import { getContacts, ContactRecord} from "./data";
+import { getContacts} from "./data";
 
 export const loader = async () => {
   const contacts = await getContacts();
