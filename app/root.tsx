@@ -42,9 +42,6 @@ export default function App() {
               <button type="submit">New</button>
             </Form>
           </div>
-          <div id="detail">
-            <Outlet />
-          </div>
           <nav>
             <ul>
               <li>
@@ -55,6 +52,9 @@ export default function App() {
               </li>
             </ul>
           </nav>
+        </div>
+        <div id="detail">
+          <Outlet />
         </div>
 
         <ScrollRestoration />
